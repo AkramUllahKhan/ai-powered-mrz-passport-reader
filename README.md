@@ -1,90 +1,138 @@
-# MRZ Passport Reader from Image
+```markdown
+# 🛂 AI-Powered MRZ Passport Reader from Image
 
-This project is an implementation of a Machine-Readable Zone (MRZ) reader from images using segmentation, face detection, and Optical Character Recognition (OCR). The implementation leverages TensorFlow Lite models for segmentation, a Caffe model for face detection, and EasyOCR for text recognition.
+This project is an AI-based **Machine Readable Zone (MRZ)** reader designed to automatically extract MRZ text from a batch of passport images. It uses segmentation, face detection, image preprocessing, and OCR to accurately identify and log passport details.
 
-## Features
+---
 
-- **MRZ Detection**: Automatically detects and segments the MRZ region in passport images.
-- **Face Detection**: Identifies and crops the face from the passport image.
-- **OCR with EasyOCR**: Extracts text from the segmented MRZ region using EasyOCR.
-- **Preprocessing**: Includes optional preprocessing steps such as skew correction, shadow removal, and background clearing to improve OCR accuracy.
+## 🚀 Features
 
-## Installation
+- 📸 **Batch Processing** of passport images
+- 🧠 **MRZ Region Segmentation** using a TensorFlow Lite model
+- 🧾 **Text Extraction** using EasyOCR
+- 🙎 **Face Detection** using a Caffe model
+- 🧼 **Image Preprocessing**: shadow removal, background clearing, skew correction
+- 📊 **Excel Export**: Results saved to `mrz_results.xlsx` with formatted output
+- 🔁 Automatically creates backups if Excel file access fails
 
-### Prerequisites
+---
 
-- Python 3.10 or higher
-- Install the required Python packages from the `requirements.txt` file:
+## 📁 Project Structure
+
+```
+ai-powered-mrz-passport-reader/
+│
+├── input_images/                  # Folder containing passport images
+├── weights/
+│   ├── face_detector/             # Caffe model for face detection
+│   └── mrz_detector/              # TFLite model for MRZ segmentation
+│
+├── mrz_reader/                    # Core processing module
+├── main.py                        # 🔁 Main batch processing script
+├── requirements.txt               # Python dependencies
+├── README.md                      # Project documentation
+└── .gitignore
+```
+
+---
+
+## 📦 Installation
+
+### Requirements
+
+- Python 3.10+
+- Recommended: Create and activate a virtual environment
+
+### Setup
 
 ```bash
-git clone https://github.com/SerdarHelli/MRZ_Passport_Reader_From_Image.git
-cd MRZ_Passport_Reader_From_Image
-pip install -e . -q
+git clone https://github.com/AkramUllahKhan/ai-powered-mrz-passport-reader.git
+cd ai-powered-mrz-passport-reader
+pip install -r requirements.txt
 ```
 
+---
 
-## Example Usage
-```python
+## 📂 How to Use
 
-import json
-import cv2
-from mrz_reader.reader import MRZReader
+1. Add all your passport images (`.jpg`, `.jpeg`, `.png`) to the `input_images/` folder.
 
-
-# Initialize the MRZReader
-reader = mrz_reader.reader.MRZReader( 
-    facedetection_protxt = "./weights/face_detector/deploy.prototxt",
-    facedetection_caffemodel = "./weights/face_detector/res10_300x300_ssd_iter_140000.caffemodel",
-    segmentation_model = "./weights/mrz_detector/mrz_seg.tflite",
-    easy_ocr_params = { "lang_list": ["en"], "gpu": False }
-
-)
-# Load an image
-image_path = 'path_to_your_image.jpg'
-
-# Perform MRZ reading with preprocessing and face detection
-
-text_results,segmented_image ,detected_face = reader.predict(
-    image_path,
-    do_facedetect = True,
-    preprocess_config = {
-            "do_preprocess": False,
-            "skewness": False,
-            "delete_shadow": False,
-            "clear_background": False
-        } # or {} send empty
-
-)
-# Display results
-print("Recognized Text:")
-for result in text_results:
-    bbox, text, confidence = result
-    print(f"Bounding Box on segmented_image: {bbox}")
-    print(f"Recognized Text: {text}")
-    print(f"Confidence: {confidence:.2f}")
-    print("-" * 50)
-
-if detected_face is not None:
-    print("Face detected in the image.")
-
-# Display the images
-cv2.imshow("Segmented Image", segmented_image)
-if detected_face is not None:
-    cv2.imshow("Detected Face", detected_face)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+2. Place model weights:
 
 ```
+weights/
+├── face_detector/
+│   ├── deploy.prototxt
+│   └── res10_300x300_ssd_iter_140000.caffemodel
+├── mrz_detector/
+│   └── mrz_seg.tflite
+```
 
- ## Example Result 
- 
- 
-<img align="left" width="33%" src="https://github.com/SerdarHelli/MRZ_Passport_Reader_From_Image/blob/main/example.jpg">
+3. Run the script:
 
-<br/><br/>
+```bash
+python main.py
+```
 
-After you give this image to the models , you will take this result ***P<GBRUNITED<KINGDOM<FIVE<<JODIE<PIPPA<<<<<<<1071857032GBR8501178F1601312<<<<<<<<<<<<<<02*** as a string. This study is a basic solution . Your image which you give  should be clear, and it should cover whole area.
-<br/><br/>
-<br/><br/>
+4. Output will be saved to:
 
+```
+mrz_results.xlsx
+```
 
+---
+
+## 📤 Output Format (Excel)
+
+| Passport Image Path | MRZ Text | Confidence |
+|---------------------|----------|------------|
+| ./input_images/img1.jpg | P<PAK...ULLAH<<AKRAM... | 0.91 |
+
+If any error occurs while processing an image, it logs the error in the MRZ column with `0` confidence.
+
+---
+
+## 🌍 Sample MRZ (Pakistani Passport Example)
+
+```
+P<PAKKHAN<<AKRAM<ULLAH<<<<<<<<<<<<<<<<<<<<<<<<
+CN9876543<PAK9901019M2501013<<<<<<<<<<<<<<08
+```
+
+---
+
+## 📊 Technologies Used
+
+- [EasyOCR](https://github.com/JaidedAI/EasyOCR) — For text extraction
+- [OpenCV](https://opencv.org/) — For face detection and image processing
+- [TensorFlow Lite](https://www.tensorflow.org/lite) — For MRZ segmentation
+- [Caffe](https://caffe.berkeleyvision.org/) — For face detection
+- [Pandas](https://pandas.pydata.org/) — Excel data handling
+- [XlsxWriter](https://pypi.org/project/XlsxWriter/) + [openpyxl](https://openpyxl.readthedocs.io/) — Excel writing/formatting
+- [TQDM](https://tqdm.github.io/) — CLI progress bar
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License.  
+Please contact the author for commercial use or adaptation.
+
+---
+
+## 👤 Author
+
+**Akram Ullah Khan**  
+🎓 CS Graduate – UET Peshawar  
+📍 Developed for **MORA** (Ministry of Religious Affairs)  
+🔗 [GitHub](https://github.com/AkramUllahKhan)
+
+---
+
+## 💬 Feedback & Contributions
+
+- Found a bug? Open an [issue](https://github.com/AkramUllahKhan/ai-powered-mrz-passport-reader/issues)
+- Want to contribute? Fork the repo and send a pull request!
+```
+
+---
