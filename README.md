@@ -1,4 +1,3 @@
-```markdown
 # 🛂 AI-Powered MRZ Passport Reader from Image
 
 This project is an AI-based **Machine Readable Zone (MRZ)** reader designed to automatically extract MRZ text from a batch of passport images. It uses segmentation, face detection, image preprocessing, and OCR to accurately identify and log passport details.
@@ -133,6 +132,4 @@ Please contact the author for commercial use or adaptation.
 
 - Found a bug? Open an [issue](https://github.com/AkramUllahKhan/ai-powered-mrz-passport-reader/issues)
 - Want to contribute? Fork the repo and send a pull request!
-```
-
 ---
