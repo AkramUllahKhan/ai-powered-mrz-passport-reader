@@ -56,7 +56,7 @@ pip install -r requirements.txt
 
 1. Add all your passport images (`.jpg`, `.jpeg`, `.png`) to the `input_images/` folder.
 
-2. Place model weights:
+2. Place model weights (Optional):
 
 ```
 weights/
