@@ -4,3 +4,7 @@ imutils>=0.5.4
 deskew>=0.10.36
 easyocr
 tensorflow
+pandas
+tqdm
+xlsxwriter
+openpyxl

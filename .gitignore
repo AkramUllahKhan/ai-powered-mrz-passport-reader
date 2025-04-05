@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+*.log
+*.idea/
+*.vscode/
+.env
+*.h5
+.DS_Store
+*.tflite
+*.xlsx
+input_images/
+venv/
